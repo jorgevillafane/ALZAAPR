@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workout History</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+      background: #f5f5f5;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+    }
+    .back-btn {
+      background: #6c757d;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    .back-btn:hover {
+      background: #5a6268;
+    }
+    .filter-section {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .filter-section label {
+      margin-right: 10px;
+      font-weight: bold;
+    }
+    .filter-section input {
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+    .filter-section button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .filter-section button:hover {
+      background: #0056b3;
+    }
+    .log-card {
+      background: white;
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      border-left: 4px solid #007bff;
+    }
+    .log-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    .exercise-name {
+      font-size: 20px;
+      font-weight: bold;
+      color: #007bff;
+    }
+    .log-date {
+      color: #666;
+      font-size: 14px;
+    }
+    .set-row {
+      padding: 8px 0;
+      color: #333;
+      font-size: 15px;
+    }
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+    }
+    .no-logs {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+      background: white;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <button class="back-btn" onclick="window.location.href='dashboard.html'">← Back to Dashboard</button>
+  
+  <h2>📊 Workout History</h2>
+
+  <div class="filter-section">
+    <label for="dateFilter">Filter by Date:</label>
+    <input type="date" id="dateFilter">
+    <button onclick="filterByDate()">Filter</button>
+    <button onclick="showAll()">Show All</button>
+  </div>
+  
+  <div id="historyContainer" class="loading">Loading workout history...</div>
+
+  <script>
+    const historyContainer = document.getElementById("historyContainer");
+    const dateFilter = document.getElementById("dateFilter");
+    let allLogs = [];
+
+    // Load workout history
+    async function loadHistory(date = null) {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        alert("Please log in first");
+        window.location.href = "index.html";
+        return;
+      }
+
+      try {
+        let url = "http://localhost:8080/api/logs/history";
+        if (date) {
+          url += `?date=${date}`;
+        }
+
+        const res = await fetch(url, {
+          headers: { "Authorization": token }
+        });
+
+        if (!res.ok) throw new Error("Failed to fetch history");
+
+        const result = await res.json();
+        if (result.success) {
+          allLogs = result.data;
+          displayHistory(allLogs);
+        } else {
+          historyContainer.innerHTML = '<div class="no-logs">Error loading history</div>';
+        }
+      } catch (err) {
+        console.error("Error loading history:", err);
+        historyContainer.innerHTML = '<div class="no-logs">Failed to load workout history</div>';
+      }
+    }
+
+    // Display workout history
+    function displayHistory(logs) {
+      historyContainer.classList.remove("loading");
+      
+      if (logs.length === 0) {
+        historyContainer.innerHTML = '<div class="no-logs">No workout logs found. Start logging workouts!</div>';
+        return;
+      }
+
+      historyContainer.innerHTML = "";
+
+      // Sort logs by date (newest first)
+      logs.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      logs.forEach(log => {
+        const card = document.createElement("div");
+        card.classList.add("log-card");
+
+        let setsHTML = "";
+        log.sets.forEach(set => {
+          setsHTML += `<div class="set-row">Set ${set.setNumber}: ${set.weight} lbs × ${set.reps} reps</div>`;
+        });
+
+        card.innerHTML = `
+          <div class="log-header">
+            <div class="exercise-name">${log.exercise.name}</div>
+            <div class="log-date">${formatDate(log.date)}</div>
+          </div>
+          ${setsHTML}
+        `;
+
+        historyContainer.appendChild(card);
+      });
+    }
+
+    // Format date for display
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', { 
+        weekday: 'short', 
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric' 
+      });
+    }
+
+    // Filter by date
+    function filterByDate() {
+      const date = dateFilter.value;
+      if (!date) {
+        alert("Please select a date");
+        return;
+      }
+      loadHistory(date);
+    }
+
+    // Show all logs
+    function showAll() {
+      dateFilter.value = "";
+      loadHistory();
+    }
+
+    // Load all history on page load
+    loadHistory();
+  </script>
+</body>
+</html>

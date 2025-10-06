@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Routine Workout</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 700px;
+      margin: auto;
+      background: #f5f5f5;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .routine-info {
+      text-align: center;
+      color: #666;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+    .back-btn {
+      background: #6c757d;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    .back-btn:hover {
+      background: #5a6268;
+    }
+    .workout-selector {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .workout-selector h3 {
+      margin-top: 0;
+      color: #007bff;
+    }
+    .workout-btn {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 15px;
+      margin: 5px;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 16px;
+      min-width: 120px;
+    }
+    .workout-btn:hover {
+      background: #0056b3;
+    }
+    .workout-btn.active {
+      background: #28a745;
+    }
+    .exercise-card {
+      background: white;
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .exercise-name {
+      font-size: 18px;
+      font-weight: bold;
+      color: #007bff;
+      margin-bottom: 10px;
+    }
+    .exercise-sets {
+      color: #666;
+      margin-bottom: 15px;
+    }
+    .set-input-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+    .set-input-row input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .set-input-row .set-label {
+      min-width: 50px;
+      font-weight: bold;
+      color: #333;
+    }
+    .complete-exercise-btn {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      width: 100%;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    .complete-exercise-btn:hover {
+      background: #218838;
+    }
+    .complete-exercise-btn.completed {
+      background: #6c757d;
+    }
+    .finish-workout-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 15px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 18px;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+    .finish-workout-btn:hover {
+      background: #c82333;
+    }
+    #workoutContent {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <button class="back-btn" onclick="window.location.href='select-routine.html'">← Back to Routines</button>
+  
+  <h2 id="routineName">Loading...</h2>
+  <div class="routine-info" id="routineDescription"></div>
+
+  <div class="workout-selector">
+    <h3>Select Workout Day</h3>
+    <div id="workoutButtons"></div>
+  </div>
+
+  <div id="workoutContent"></div>
+  <button class="finish-workout-btn" id="finishBtn" style="display: none;" onclick="finishWorkout()">Finish Workout</button>
+
+  <script>
+    const routineWorkouts = {
+      "Starting Strength": {
+        "Workout A": [
+          { exercise: "Squat", sets: 3, reps: 5 },
+          { exercise: "Bench Press", sets: 3, reps: 5 },
+          { exercise: "Deadlift", sets: 1, reps: 5 }
+        ],
+        "Workout B": [
+          { exercise: "Squat", sets: 3, reps: 5 },
+          { exercise: "Overhead Press", sets: 3, reps: 5 },
+          { exercise: "Barbell Row", sets: 5, reps: 3 }
+        ]
+      },
+      "StrongLifts 5x5": {
+        "Workout A": [
+          { exercise: "Squat", sets: 5, reps: 5 },
+          { exercise: "Bench Press", sets: 5, reps: 5 },
+          { exercise: "Barbell Row", sets: 5, reps: 5 }
+        ],
+        "Workout B": [
+          { exercise: "Squat", sets: 5, reps: 5 },
+          { exercise: "Overhead Press", sets: 5, reps: 5 },
+          { exercise: "Deadlift", sets: 1, reps: 5 }
+        ]
+      },
+      "Push/Pull/Legs": {
+        "Push Day": [
+          { exercise: "Bench Press", sets: 4, reps: "6-8" },
+          { exercise: "Overhead Press", sets: 3, reps: "8-10" }
+        ],
+        "Pull Day": [
+          { exercise: "Deadlift", sets: 3, reps: 5 },
+          { exercise: "Pull-up", sets: 4, reps: "8-10" },
+          { exercise: "Barbell Row", sets: 3, reps: "8-10" }
+        ],
+        "Leg Day": [
+          { exercise: "Squat", sets: 4, reps: "6-8" },
+          { exercise: "Leg Press", sets: 3, reps: "10-12" }
+        ]
+      },
+      "Upper/Lower": {
+        "Upper Strength": [
+          { exercise: "Bench Press", sets: 4, reps: 5 },
+          { exercise: "Barbell Row", sets: 4, reps: 6 },
+          { exercise: "Overhead Press", sets: 3, reps: 8 },
+          { exercise: "Pull-up", sets: 3, reps: "8-10" }
+        ],
+        "Lower Strength": [
+          { exercise: "Squat", sets: 4, reps: 5 },
+          { exercise: "Deadlift", sets: 3, reps: 5 },
+          { exercise: "Leg Press", sets: 3, reps: 8 }
+        ]
+      }
+    };
+
+    let exercisesMap = {};
+    let currentRoutineName = "";
+    let currentWorkoutData = [];
+    let completedExercises = [];
+
+    async function loadExercises() {
+      const token = localStorage.getItem("authToken");
+      try {
+        const res = await fetch("http://localhost:8080/api/exercises", {
+          headers: { "Authorization": token }
+        });
+        const exercises = await res.json();
+        exercisesMap = {};
+        exercises.forEach(ex => {
+          exercisesMap[ex.name] = ex.id;
+        });
+      } catch (err) {
+        console.error("Error loading exercises:", err);
+      }
+    }
+
+    async function loadRoutine() {
+      const routineId = localStorage.getItem("activeRoutineId");
+      if (!routineId) {
+        window.location.href = "select-routine.html";
+        return;
+      }
+
+      const token = localStorage.getItem("authToken");
+      try {
+        const res = await fetch("http://localhost:8080/api/routines", {
+          headers: { "Authorization": token }
+        });
+        const routines = await res.json();
+        const routine = routines.find(r => r.id == routineId);
+
+        if (routine) {
+          currentRoutineName = routine.name;
+          document.getElementById("routineName").textContent = routine.name;
+          document.getElementById("routineDescription").textContent = routine.description;
+          
+          if (routineWorkouts[routine.name]) {
+            displayWorkoutButtons(routine.name);
+          } else {
+            document.getElementById("workoutButtons").innerHTML = '<p style="color: #dc3545;">Workout details not yet configured for this routine.</p>';
+          }
+        }
+      } catch (err) {
+        console.error("Error:", err);
+      }
+    }
+
+    function displayWorkoutButtons(routineName) {
+      const workouts = routineWorkouts[routineName];
+      const buttonsContainer = document.getElementById("workoutButtons");
+      buttonsContainer.innerHTML = "";
+
+      Object.keys(workouts).forEach(workoutName => {
+        const btn = document.createElement("button");
+        btn.classList.add("workout-btn");
+        btn.textContent = workoutName;
+        btn.onclick = () => selectWorkout(workoutName, btn);
+        buttonsContainer.appendChild(btn);
+      });
+    }
+
+    function selectWorkout(workoutName, btnElement) {
+      document.querySelectorAll(".workout-btn").forEach(b => b.classList.remove("active"));
+      btnElement.classList.add("active");
+
+      currentWorkoutData = routineWorkouts[currentRoutineName][workoutName];
+      completedExercises = [];
+      displayWorkoutExercises();
+    }
+
+    function displayWorkoutExercises() {
+      const content = document.getElementById("workoutContent");
+      const finishBtn = document.getElementById("finishBtn");
+      content.innerHTML = "";
+      content.style.display = "block";
+      finishBtn.style.display = "none";
+
+      currentWorkoutData.forEach((ex, index) => {
+        const card = document.createElement("div");
+        card.classList.add("exercise-card");
+        card.id = `exercise-${index}`;
+
+        let setsHTML = "";
+        for (let i = 1; i <= ex.sets; i++) {
+          setsHTML += `
+            <div class="set-input-row">
+              <span class="set-label">Set ${i}:</span>
+              <input type="number" placeholder="Weight" step="0.5" class="weight-input">
+              <input type="number" placeholder="Reps" class="reps-input">
+            </div>
+          `;
+        }
+
+        card.innerHTML = `
+          <div class="exercise-name">${ex.exercise}</div>
+          <div class="exercise-sets">${ex.sets} sets × ${ex.reps} reps</div>
+          ${setsHTML}
+          <button class="complete-exercise-btn" onclick="completeExercise(${index})">Complete Exercise</button>
+        `;
+
+        content.appendChild(card);
+      });
+    }
+
+    async function completeExercise(index) {
+      const card = document.getElementById(`exercise-${index}`);
+      const weightInputs = card.querySelectorAll(".weight-input");
+      const repsInputs = card.querySelectorAll(".reps-input");
+      const exerciseData = currentWorkoutData[index];
+
+      let sets = [];
+      let allFilled = true;
+
+      weightInputs.forEach((weightInput, i) => {
+        const weight = parseFloat(weightInput.value);
+        const reps = parseInt(repsInputs[i].value);
+        
+        if (!weight || !reps) {
+          allFilled = false;
+        } else {
+          sets.push({ reps, weight });
+        }
+      });
+
+      if (!allFilled) {
+        alert("Please fill in all sets");
+        return;
+      }
+
+      const exerciseId = exercisesMap[exerciseData.exercise];
+      if (!exerciseId) {
+        alert(`Exercise "${exerciseData.exercise}" not found in database`);
+        return;
+      }
+
+      const token = localStorage.getItem("authToken");
+      const log = {
+        exerciseId: exerciseId,
+        date: new Date().toISOString().split("T")[0],
+        sets: sets
+      };
+
+      try {
+        const response = await fetch("http://localhost:8080/api/logs", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": token
+          },
+          body: JSON.stringify(log)
+        });
+
+        const result = await response.json();
+        if (result.success) {
+          completedExercises.push(index);
+          card.querySelector(".complete-exercise-btn").textContent = "✓ Completed";
+          card.querySelector(".complete-exercise-btn").classList.add("completed");
+          card.querySelector(".complete-exercise-btn").disabled = true;
+
+          if (completedExercises.length === currentWorkoutData.length) {
+            document.getElementById("finishBtn").style.display = "block";
+          }
+        } else {
+          alert("Error saving: " + result.message);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Could not connect to server");
+      }
+    }
+
+    function finishWorkout() {
+      alert("Workout completed! Great job!");
+      window.location.href = "dashboard.html";
+    }
+
+    loadExercises();
+    loadRoutine();
+  </script>
+</body>
+</html>

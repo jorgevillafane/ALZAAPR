@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select Routine</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 700px;
+      margin: auto;
+      background: #f5f5f5;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+    }
+    .back-btn {
+      background: #6c757d;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    .back-btn:hover {
+      background: #5a6268;
+    }
+    .routine-card {
+      background: white;
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+    }
+    .routine-card:hover {
+      border-color: #007bff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .routine-card.selected {
+      border-color: #28a745;
+      background: #f0f8f4;
+    }
+    .routine-name {
+      font-size: 20px;
+      font-weight: bold;
+      color: #007bff;
+      margin-bottom: 8px;
+    }
+    .routine-description {
+      color: #666;
+      font-size: 14px;
+    }
+    .start-btn {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 15px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 18px;
+      border-radius: 5px;
+      margin-top: 20px;
+      display: none;
+    }
+    .start-btn:hover {
+      background: #218838;
+    }
+    .start-btn.show {
+      display: block;
+    }
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <button class="back-btn" onclick="window.location.href='dashboard.html'">← Back to Dashboard</button>
+  
+  <h2>Select a Workout Routine</h2>
+  
+  <div id="routinesContainer" class="loading">Loading routines...</div>
+  
+  <button id="startBtn" class="start-btn">Start This Routine</button>
+
+  <script>
+    const routinesContainer = document.getElementById("routinesContainer");
+    const startBtn = document.getElementById("startBtn");
+    let selectedRoutineId = null;
+    let routines = [];
+
+    // Load routines from backend
+    async function loadRoutines() {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        alert("Please log in first");
+        window.location.href = "index.html";
+        return;
+      }
+
+      try {
+        const res = await fetch("http://localhost:8080/api/routines", {
+          headers: { "Authorization": token }
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch routines");
+        }
+
+        routines = await res.json();
+        displayRoutines();
+      } catch (err) {
+        console.error("Error loading routines:", err);
+        routinesContainer.innerHTML = '<p style="color: red;">Failed to load routines. Please try again.</p>';
+      }
+    }
+
+    // Display routines as cards
+    function displayRoutines() {
+      if (routines.length === 0) {
+        routinesContainer.innerHTML = '<p>No routines available.</p>';
+        return;
+      }
+
+      routinesContainer.innerHTML = "";
+      routinesContainer.classList.remove("loading");
+
+      routines.forEach(routine => {
+        const card = document.createElement("div");
+        card.classList.add("routine-card");
+        card.innerHTML = `
+          <div class="routine-name">${routine.name}</div>
+          <div class="routine-description">${routine.description}</div>
+        `;
+        
+        card.addEventListener("click", () => selectRoutine(routine.id, card));
+        routinesContainer.appendChild(card);
+      });
+    }
+
+    // Select a routine
+    function selectRoutine(routineId, cardElement) {
+      selectedRoutineId = routineId;
+      
+      // Remove selected class from all cards
+      document.querySelectorAll(".routine-card").forEach(c => c.classList.remove("selected"));
+      
+      // Add selected class to clicked card
+      cardElement.classList.add("selected");
+      
+      // Show start button
+      startBtn.classList.add("show");
+    }
+
+    // Start the selected routine
+    startBtn.addEventListener("click", () => {
+      if (selectedRoutineId) {
+        // Save selected routine to localStorage
+        localStorage.setItem("activeRoutineId", selectedRoutineId);
+        // Redirect to routine workout page
+        window.location.href = "routine-workout.html";
+      }
+    });
+
+    // Load routines on page load
+    loadRoutines();
+  </script>
+</body>
+</html>

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Workout</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+      background: #f5f5f5;
+    }
+    h2 { 
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .back-btn {
+      background: #6c757d;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    .back-btn:hover {
+      background: #5a6268;
+    }
+    .form-card {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    label { 
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      color: #333;
+    }
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    .set-input-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      align-items: center;
+    }
+    .set-input-row input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    .log-set-btn {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      white-space: nowrap;
+    }
+    .log-set-btn:hover {
+      background: #0056b3;
+    }
+    .logged-sets {
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 2px solid #eee;
+    }
+    .logged-sets h4 {
+      margin-bottom: 10px;
+      color: #333;
+    }
+    .set-item {
+      background: #e9f7ef;
+      padding: 10px 15px;
+      margin-bottom: 8px;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-left: 3px solid #28a745;
+    }
+    .set-item .set-info {
+      color: #333;
+    }
+    .delete-set-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 3px;
+      font-size: 12px;
+    }
+    .delete-set-btn:hover {
+      background: #c82333;
+    }
+    .finish-btn {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 15px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+    .finish-btn:hover {
+      background: #218838;
+    }
+    .finish-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .new-exercise-btn {
+      background: #17a2b8;
+      color: white;
+      border: none;
+      padding: 12px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 14px;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    .new-exercise-btn:hover {
+      background: #138496;
+    }
+    .workout-summary {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 15px;
+    }
+    .workout-summary h3 {
+      color: #007bff;
+      margin-bottom: 10px;
+    }
+    .summary-sets {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <button class="back-btn" onclick="window.location.href='dashboard.html'">← Back to Dashboard</button>
+  
+  <h2>Quick Workout</h2>
+
+  <div class="form-card">
+    <label for="bodyPart">Body Part</label>
+    <select id="bodyPart">
+      <option value="">-- Select Body Part --</option>
+      <option value="Chest">Chest</option>
+      <option value="Back">Back</option>
+      <option value="Shoulders">Shoulders</option>
+      <option value="Arms">Arms</option>
+      <option value="LegsQuads">Legs (Quads)</option>
+      <option value="LegsHamstrings">Legs (Hamstrings)</option>
+      <option value="Core">Core</option>
+    </select>
+
+    <label for="exercise">Exercise</label>
+    <select id="exercise" disabled>
+      <option value="">-- Select Exercise --</option>
+    </select>
+
+    <div id="setInputSection" style="display: none;">
+      <div class="set-input-row">
+        <input type="number" id="weightInput" placeholder="Weight (lbs)" step="0.5">
+        <input type="number" id="repsInput" placeholder="Reps">
+        <button class="log-set-btn" onclick="logSet()">Log Set</button>
+      </div>
+
+      <div class="logged-sets" id="loggedSets" style="display: none;">
+        <h4>Logged Sets</h4>
+        <div id="setsContainer"></div>
+        <button class="finish-btn" onclick="finishExercise()">Finish Exercise</button>
+        <button class="new-exercise-btn" onclick="startNewExercise()">Start New Exercise</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="workoutSummary"></div>
+
+  <script>
+    const exercisesByBodyPart = {
+      Chest: ["Bench Press"],
+      Back: ["Barbell Row", "Pull-up", "Deadlift"],
+      Shoulders: ["Overhead Press"],
+      Arms: ["Dumbbell Curl"],
+      LegsQuads: ["Squat", "Leg Press"],
+      LegsHamstrings: ["Deadlift"],
+      Core: []
+    };
+
+    const bodyPartSelect = document.getElementById("bodyPart");
+    const exerciseSelect = document.getElementById("exercise");
+    const setInputSection = document.getElementById("setInputSection");
+    const weightInput = document.getElementById("weightInput");
+    const repsInput = document.getElementById("repsInput");
+    const loggedSets = document.getElementById("loggedSets");
+    const setsContainer = document.getElementById("setsContainer");
+    const workoutSummary = document.getElementById("workoutSummary");
+
+    let exercisesMap = {};
+    let currentSets = [];
+    let currentExerciseName = "";
+    let currentBodyPart = "";
+    let completedExercises = [];
+
+    // Load exercises from backend
+    async function loadExercises() {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        alert("Please log in first");
+        window.location.href = "index.html";
+        return;
+      }
+
+      try {
+        const res = await fetch("http://localhost:8080/api/exercises", {
+          headers: { "Authorization": token }
+        });
+
+        if (!res.ok) throw new Error("Failed to fetch exercises");
+
+        const exercises = await res.json();
+        exercisesMap = {};
+        exercises.forEach(ex => {
+          exercisesMap[ex.name] = ex.id;
+        });
+      } catch (err) {
+        console.error("Error loading exercises:", err);
+        alert("Could not load exercises from server.");
+      }
+    }
+
+    // Populate exercises when body part changes
+    bodyPartSelect.addEventListener("change", () => {
+      const bodyPart = bodyPartSelect.value;
+      exerciseSelect.innerHTML = '<option value="">-- Select Exercise --</option>';
+      if (bodyPart && exercisesByBodyPart[bodyPart]) {
+        exercisesByBodyPart[bodyPart].forEach(ex => {
+          const option = document.createElement("option");
+          option.value = ex;
+          option.textContent = ex;
+          exerciseSelect.appendChild(option);
+        });
+        exerciseSelect.disabled = false;
+      } else {
+        exerciseSelect.disabled = true;
+        setInputSection.style.display = "none";
+      }
+    });
+
+    // Show set input when exercise is selected
+    exerciseSelect.addEventListener("change", () => {
+      if (exerciseSelect.value) {
+        currentExerciseName = exerciseSelect.value;
+        currentBodyPart = bodyPartSelect.value;
+        currentSets = [];
+        setInputSection.style.display = "block";
+        loggedSets.style.display = "none";
+        setsContainer.innerHTML = "";
+        weightInput.value = "";
+        repsInput.value = "";
+        weightInput.focus();
+      } else {
+        setInputSection.style.display = "none";
+      }
+    });
+
+    // Log a single set
+    function logSet() {
+      const weight = parseFloat(weightInput.value);
+      const reps = parseInt(repsInput.value);
+
+      if (!weight || weight <= 0 || !reps || reps <= 0) {
+        alert("Please enter valid weight and reps");
+        return;
+      }
+
+      const setNumber = currentSets.length + 1;
+      currentSets.push({ setNumber, weight, reps });
+
+      // Display the logged set
+      const setItem = document.createElement("div");
+      setItem.classList.add("set-item");
+      setItem.innerHTML = `
+        <span class="set-info">Set ${setNumber}: ${weight} lbs × ${reps} reps</span>
+        <button class="delete-set-btn" onclick="deleteSet(${setNumber - 1})">Delete</button>
+      `;
+      setsContainer.appendChild(setItem);
+
+      // Show logged sets section
+      loggedSets.style.display = "block";
+
+      // Clear inputs and focus on weight for next set
+      weightInput.value = "";
+      repsInput.value = "";
+      weightInput.focus();
+    }
+
+    // Delete a set
+    function deleteSet(index) {
+      currentSets.splice(index, 1);
+      // Renumber remaining sets
+      currentSets.forEach((set, i) => {
+        set.setNumber = i + 1;
+      });
+      // Redisplay all sets
+      setsContainer.innerHTML = "";
+      currentSets.forEach((set, i) => {
+        const setItem = document.createElement("div");
+        setItem.classList.add("set-item");
+        setItem.innerHTML = `
+          <span class="set-info">Set ${set.setNumber}: ${set.weight} lbs × ${set.reps} reps</span>
+          <button class="delete-set-btn" onclick="deleteSet(${i})">Delete</button>
+        `;
+        setsContainer.appendChild(setItem);
+      });
+
+      if (currentSets.length === 0) {
+        loggedSets.style.display = "none";
+      }
+    }
+
+    // Finish exercise and save to backend
+    async function finishExercise() {
+      if (currentSets.length === 0) {
+        alert("Please log at least one set");
+        return;
+      }
+
+      const exerciseId = exercisesMap[currentExerciseName];
+      if (!exerciseId) {
+        alert("Exercise not found");
+        return;
+      }
+
+      const token = localStorage.getItem("authToken");
+      const log = {
+        exerciseId: exerciseId,
+        date: new Date().toISOString().split("T")[0],
+        sets: currentSets.map(s => ({ reps: s.reps, weight: s.weight }))
+      };
+
+      try {
+        const response = await fetch("http://localhost:8080/api/logs", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": token
+          },
+          body: JSON.stringify(log)
+        });
+
+        const result = await response.json();
+        if (result.success) {
+          // Add to completed exercises
+          completedExercises.push({
+            bodyPart: currentBodyPart,
+            exercise: currentExerciseName,
+            sets: [...currentSets]
+          });
+
+          // Display in summary
+          displayWorkoutSummary();
+
+          // Reset for next exercise
+          startNewExercise();
+        } else {
+          alert("Error saving workout: " + result.message);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Could not connect to server.");
+      }
+    }
+
+    // Start a new exercise
+    function startNewExercise() {
+      bodyPartSelect.value = "";
+      exerciseSelect.value = "";
+      exerciseSelect.disabled = true;
+      setInputSection.style.display = "none";
+      currentSets = [];
+      currentExerciseName = "";
+      currentBodyPart = "";
+      bodyPartSelect.focus();
+    }
+
+    // Display workout summary
+    function displayWorkoutSummary() {
+      if (completedExercises.length === 0) {
+        workoutSummary.innerHTML = "";
+        return;
+      }
+
+      let summaryHTML = "";
+      completedExercises.forEach(ex => {
+        let setsHTML = ex.sets.map(s => 
+          `Set ${s.setNumber}: ${s.weight} lbs × ${s.reps} reps`
+        ).join("<br>");
+
+        summaryHTML += `
+          <div class="workout-summary">
+            <h3>${ex.bodyPart} - ${ex.exercise}</h3>
+            <div class="summary-sets">${setsHTML}</div>
+          </div>
+        `;
+      });
+
+      workoutSummary.innerHTML = summaryHTML;
+    }
+
+    // Allow Enter key to move between inputs
+    weightInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        repsInput.focus();
+      }
+    });
+
+    repsInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        logSet();
+      }
+    });
+
+    loadExercises();
+  </script>
+</body>
+</html>

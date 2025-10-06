@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ALZAA PR: PorJorgeV - Panel Principal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+      background: #f5f5f5;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 40px;
+    }
+    .menu-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .menu-button {
+      background: white;
+      border: 2px solid #007bff;
+      padding: 30px 20px;
+      cursor: pointer;
+      font-size: 18px;
+      border-radius: 10px;
+      transition: all 0.3s;
+      text-align: center;
+      color: #007bff;
+      font-weight: bold;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .menu-button:hover {
+      background: #007bff;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .menu-button .description {
+      font-size: 14px;
+      font-weight: normal;
+      margin-top: 8px;
+      opacity: 0.8;
+    }
+    .logout-btn {
+      margin-top: 30px;
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      width: 100%;
+    }
+    .logout-btn:hover {
+      background: #c82333;
+    }
+  </style>
+</head>
+<body>
+  <h1>🏋️ ALZAA PR</h1>
+  
+  <div class="menu-container">
+    <button class="menu-button" onclick="window.location.href='select-routine.html'">
+      <div>📋 Seleccionar Rutina Predefinida</div>
+      <div class="description">Escoge entre programas de entrenamiento populares</div>
+    </button>
+    
+    <button class="menu-button" onclick="window.location.href='create-routine.html'">
+      <div>✏️ Crear Rutina Personalizada</div>
+      <div class="description">Diseña tu propio plan de entrenamiento</div>
+    </button>
+    
+    <button class="menu-button" onclick="window.location.href='quick-workout.html'">
+      <div>💪 Entrenamiento Rápido</div>
+      <div class="description">Registra ejercicios al instante sin rutina</div>
+    </button>
+    
+    <button class="menu-button" onclick="window.location.href='workout-history.html'">
+      <div>📊 Historial de Entrenamientos</div>
+      <div class="description">Revisa tus registros y progreso</div>
+    </button>
+  </div>
+
+  <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+
+  <script>
+    // Verifica si el usuario está autenticado
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      alert("Por favor, inicia sesión primero.");
+      window.location.href = "index.html";
+    }
+
+    function logout() {
+      localStorage.removeItem("authToken");
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>
