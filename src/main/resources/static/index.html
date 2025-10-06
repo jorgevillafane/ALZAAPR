@@ -102,7 +102,7 @@
       }
 
       try {
-        const res = await fetch("http://localhost:8080/api/auth/login", {
+        const res = await fetch("https://alzaaspr-production.up.railway.app/api/auth/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password })
@@ -125,7 +125,7 @@
     // ✅ Fixed guest login logic (calls backend instead of static token)
     document.getElementById("guestLoginBtn").addEventListener("click", async () => {
       try {
-        const res = await fetch("http://localhost:8080/api/auth/guest-login", {
+        const res = await fetch("https://alzaaspr-production.up.railway.app/api/auth/guest-login", {
           method: "POST",
           headers: { "Content-Type": "application/json" }
         });
