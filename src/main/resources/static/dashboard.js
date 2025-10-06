@@ -1,3 +1,6 @@
+// Production API URL
+const API_URL = "https://alzaaspr-production.up.railway.app";
+
 // Exercises grouped by body part (matching backend)
 const exercisesByBodyPart = {
   Chest: ["Bench Press"],
@@ -29,7 +32,7 @@ async function loadExercises() {
   }
 
   try {
-    const res = await fetch("http://localhost:8080/api/exercises", {
+    const res = await fetch(`${API_URL}/api/exercises`, {
       headers: { "Authorization": token }
     });
 
@@ -73,10 +76,9 @@ setsInput.addEventListener("input", () => {
     const div = document.createElement("div");
     div.classList.add("set-inputs");
     div.innerHTML = `
-div.innerHTML = `
-  <input type="number" placeholder="Peso del set ${i}">
-  <input type="number" placeholder="Reps del set ${i}">
-`;
+      <input type="number" placeholder="Peso del set ${i}">
+      <input type="number" placeholder="Reps del set ${i}">
+    `;
     setsContainer.appendChild(div);
   }
 });
@@ -120,7 +122,7 @@ logBtn.addEventListener("click", async () => {
   };
 
   try {
-    const response = await fetch("http://localhost:8080/api/logs", {
+    const response = await fetch(`${API_URL}/api/logs`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -129,21 +131,21 @@ logBtn.addEventListener("click", async () => {
       body: JSON.stringify(log)
     });
 
-   const text = await response.text();
-console.log("Raw response:", text);
-console.log("Response length:", text.length);
+    const text = await response.text();
+    console.log("Raw response:", text);
+    console.log("Response length:", text.length);
 
-let result;
-try {
-  result = JSON.parse(text);
-} catch (e) {
-  console.error("Failed to parse JSON:", e);
-  console.log("First 500 chars:", text.substring(0, 500));
-  alert("Server returned invalid JSON");
-  return;
-}
+    let result;
+    try {
+      result = JSON.parse(text);
+    } catch (e) {
+      console.error("Failed to parse JSON:", e);
+      console.log("First 500 chars:", text.substring(0, 500));
+      alert("Server returned invalid JSON");
+      return;
+    }
 
-if (result.success) {
+    if (result.success) {
       let logText = `<strong>${bodyPart} - ${exerciseName}</strong><br>`;
       logSets.forEach((entry, i) => {
         logText += `Set ${i + 1}: ${entry.weight} lbs x ${entry.reps} reps<br>`;
