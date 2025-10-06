@@ -1,14 +1,14 @@
-# Step 1: Use an OpenJDK image
-FROM openjdk:17-jdk-slim
-
-# Step 2: Set working directory inside the container
+# ---- Stage 1: Build the app ----
+FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-# Step 3: Copy the built JAR from target (Render will build it for us)
-COPY target/*.jar app.jar
-
-# Step 4: Expose the default Spring Boot port
+# ---- Stage 2: Run the app ----
+FROM eclipse-temurin:17-jdk-jammy
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
-
-# Step 5: Run the app
 ENTRYPOINT ["java", "-jar", "app.jar"]
+
