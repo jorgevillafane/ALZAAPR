@@ -33,7 +33,6 @@ build/
 .vscode/
 
 # Spring Boot - Don't commit production secrets
-application-prod.properties
 application-local.properties
 
 # Environment variables
