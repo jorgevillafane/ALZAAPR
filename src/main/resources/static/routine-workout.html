@@ -17,11 +17,11 @@
       color: #333;
       margin-bottom: 10px;
     }
-    .routine-subtitle {
+    .routine-info {
       text-align: center;
       color: #666;
-      font-size: 14px;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
+      font-style: italic;
     }
     .back-btn {
       background: #6c757d;
@@ -35,470 +35,390 @@
     .back-btn:hover {
       background: #5a6268;
     }
-    
-    /* Exercise Card Styles */
+    .workout-selector {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .workout-selector h3 {
+      margin-top: 0;
+      color: #007bff;
+    }
+    .workout-btn {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 15px;
+      margin: 5px;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 16px;
+      min-width: 120px;
+    }
+    .workout-btn:hover {
+      background: #0056b3;
+    }
+    .workout-btn.active {
+      background: #28a745;
+    }
     .exercise-card {
       background: white;
       padding: 20px;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       border-radius: 10px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    .exercise-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
     .exercise-name {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: bold;
       color: #007bff;
+      margin-bottom: 10px;
     }
-    .exercise-number {
-      background: #007bff;
-      color: white;
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 14px;
-      font-weight: bold;
-    }
-
-    /* GIF Demo Section */
-    .exercise-demo {
-      text-align: center;
-      margin-bottom: 20px;
-      padding: 15px;
-      background: #f8f9fa;
-      border-radius: 8px;
-    }
-    .gif-thumbnail {
-      width: 180px;
-      height: 320px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-      border: 3px solid #007bff;
-      object-fit: cover;
-      display: block;
-      margin: 0 auto;
-    }
-    .gif-thumbnail:hover {
-      transform: scale(1.05);
-      box-shadow: 0 4px 12px rgba(0,123,255,0.3);
-    }
-    .click-hint {
-      margin-top: 10px;
-      font-size: 12px;
+    .exercise-sets {
       color: #666;
-      font-style: italic;
-    }
-
-    /* Modal for expanded GIF */
-    .gif-modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.9);
-      justify-content: center;
-      align-items: center;
-    }
-    .gif-modal-content {
-      position: relative;
-      max-width: 90%;
-      max-height: 90%;
-    }
-    .gif-modal img {
-      width: auto;
-      height: 80vh;
-      max-width: 100%;
-      border-radius: 10px;
-      object-fit: contain;
-    }
-    .close-modal {
-      position: absolute;
-      top: -40px;
-      right: 0;
-      color: white;
-      font-size: 35px;
-      font-weight: bold;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 0 10px;
-    }
-    .close-modal:hover {
-      color: #ccc;
-    }
-
-    /* Sets Section */
-    .sets-section {
-      margin-top: 15px;
-    }
-    .set-label {
-      font-weight: bold;
-      color: #333;
-      margin-bottom: 5px;
-      display: block;
+      margin-bottom: 15px;
     }
     .set-input-row {
       display: flex;
       gap: 10px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       align-items: center;
-    }
-    .set-number {
-      min-width: 60px;
-      font-weight: bold;
-      color: #666;
     }
     .set-input-row input {
       flex: 1;
-      padding: 10px;
+      padding: 8px;
       border: 1px solid #ddd;
       border-radius: 5px;
-      font-size: 14px;
     }
-    .exercise-complete-btn {
+    .set-input-row .set-label {
+      min-width: 50px;
+      font-weight: bold;
+      color: #333;
+    }
+    .complete-exercise-btn {
       background: #28a745;
       color: white;
       border: none;
-      padding: 12px;
+      padding: 10px;
       cursor: pointer;
       width: 100%;
       border-radius: 5px;
       margin-top: 10px;
-      font-size: 15px;
-      font-weight: bold;
     }
-    .exercise-complete-btn:hover {
+    .complete-exercise-btn:hover {
       background: #218838;
     }
-    .exercise-complete-btn.completed {
-      background: #6c757d;
-      cursor: not-allowed;
-    }
-    .exercise-complete-btn.completed:hover {
+    .complete-exercise-btn.completed {
       background: #6c757d;
     }
-
-    /* Finish Routine Button */
-    .finish-routine-btn {
-      background: #007bff;
+    .finish-workout-btn {
+      background: #dc3545;
       color: white;
       border: none;
-      padding: 18px;
+      padding: 15px;
       cursor: pointer;
       width: 100%;
       font-size: 18px;
       border-radius: 5px;
-      margin-top: 30px;
-      font-weight: bold;
-      position: sticky;
-      bottom: 20px;
+      margin-top: 20px;
     }
-    .finish-routine-btn:hover {
-      background: #0056b3;
+    .finish-workout-btn:hover {
+      background: #c82333;
     }
-    .finish-routine-btn:disabled {
-      background: #ccc;
-      cursor: not-allowed;
+    #workoutContent {
+      display: none;
     }
 
-    .loading {
-      text-align: center;
-      padding: 40px;
-      color: #666;
-    }
-
-    /* Mobile responsiveness */
-    @media (max-width: 600px) {
-      body {
-        padding: 10px;
-      }
-      
-      .exercise-card {
-        padding: 15px;
-      }
-
-      .gif-thumbnail {
-        width: 140px;
-        height: 249px;
-      }
-      
-      .exercise-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-      }
-      
-      .set-input-row {
-        flex-wrap: wrap;
-      }
-      
-      .set-number {
-        width: 100%;
-      }
-      
-      .set-input-row input {
-        min-width: 0;
-      }
-    }
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+  
+  .form-card {
+    padding: 15px;
+  }
+  
+  .set-input-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .set-input-row input {
+    width: 100%;
+  }
+  
+  .log-set-btn {
+    width: 100%;
+    padding: 12px 20px;
+  }
+  
+  .set-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .delete-set-btn {
+    align-self: flex-end;
+  }
+}
   </style>
 </head>
 <body>
   <button class="back-btn" onclick="window.location.href='select-routine.html'">← Back to Routines</button>
   
-  <h2 id="routineTitle">Loading...</h2>
-  <p class="routine-subtitle" id="routineSubtitle"></p>
-  
-  <div id="exercisesContainer" class="loading">Loading routine...</div>
-  
-  <button id="finishBtn" class="finish-routine-btn" disabled>Complete Routine</button>
+  <h2 id="routineName">Loading...</h2>
+  <div class="routine-info" id="routineDescription"></div>
 
-  <!-- Modal for expanded GIF -->
-  <div id="gifModal" class="gif-modal" onclick="closeModal()">
-    <div class="gif-modal-content" onclick="event.stopPropagation()">
-      <button class="close-modal" onclick="closeModal()">&times;</button>
-      <img id="modalGif" src="" alt="Exercise Demo">
-    </div>
+  <div class="workout-selector">
+    <h3>Select Workout Day</h3>
+    <div id="workoutButtons"></div>
   </div>
 
+  <div id="workoutContent"></div>
+  <button class="finish-workout-btn" id="finishBtn" style="display: none;" onclick="finishWorkout()">Finish Workout</button>
+
   <script>
-    // Map exercise names to GIF files
-    const exerciseGifs = {
-      "Bench Press": "gifs/bench-press.gif",
-      "Barbell Row": "gifs/barbell-row.gif",
-      "Pull-up": "gifs/pull-up.gif",
-      "Deadlift": "gifs/deadlift.gif",
-      "Overhead Press": "gifs/overhead-press.gif",
-      "Dumbbell Curl": "gifs/dumbbell-curl.gif",
-      "Squat": "gifs/squat.gif",
-      "Leg Press": "gifs/leg-press.gif"
+    const routineWorkouts = {
+      "Starting Strength": {
+        "Workout A": [
+          { exercise: "Squat", sets: 3, reps: 5 },
+          { exercise: "Bench Press", sets: 3, reps: 5 },
+          { exercise: "Deadlift", sets: 1, reps: 5 }
+        ],
+        "Workout B": [
+          { exercise: "Squat", sets: 3, reps: 5 },
+          { exercise: "Overhead Press", sets: 3, reps: 5 },
+          { exercise: "Barbell Row", sets: 5, reps: 3 }
+        ]
+      },
+      "StrongLifts 5x5": {
+        "Workout A": [
+          { exercise: "Squat", sets: 5, reps: 5 },
+          { exercise: "Bench Press", sets: 5, reps: 5 },
+          { exercise: "Barbell Row", sets: 5, reps: 5 }
+        ],
+        "Workout B": [
+          { exercise: "Squat", sets: 5, reps: 5 },
+          { exercise: "Overhead Press", sets: 5, reps: 5 },
+          { exercise: "Deadlift", sets: 1, reps: 5 }
+        ]
+      },
+      "Push/Pull/Legs": {
+        "Push Day": [
+          { exercise: "Bench Press", sets: 4, reps: "6-8" },
+          { exercise: "Overhead Press", sets: 3, reps: "8-10" }
+        ],
+        "Pull Day": [
+          { exercise: "Deadlift", sets: 3, reps: 5 },
+          { exercise: "Pull-up", sets: 4, reps: "8-10" },
+          { exercise: "Barbell Row", sets: 3, reps: "8-10" }
+        ],
+        "Leg Day": [
+          { exercise: "Squat", sets: 4, reps: "6-8" },
+          { exercise: "Leg Press", sets: 3, reps: "10-12" }
+        ]
+      },
+      "Upper/Lower": {
+        "Upper Strength": [
+          { exercise: "Bench Press", sets: 4, reps: 5 },
+          { exercise: "Barbell Row", sets: 4, reps: 6 },
+          { exercise: "Overhead Press", sets: 3, reps: 8 },
+          { exercise: "Pull-up", sets: 3, reps: "8-10" }
+        ],
+        "Lower Strength": [
+          { exercise: "Squat", sets: 4, reps: 5 },
+          { exercise: "Deadlift", sets: 3, reps: 5 },
+          { exercise: "Leg Press", sets: 3, reps: 8 }
+        ]
+      }
     };
 
-    const exercisesContainer = document.getElementById("exercisesContainer");
-    const routineTitle = document.getElementById("routineTitle");
-    const routineSubtitle = document.getElementById("routineSubtitle");
-    const finishBtn = document.getElementById("finishBtn");
-    const gifModal = document.getElementById("gifModal");
-    const modalGif = document.getElementById("modalGif");
+    let exercisesMap = {};
+    let currentRoutineName = "";
+    let currentWorkoutData = [];
+    let completedExercises = [];
 
-    let routine = null;
-    let exerciseData = [];
-    let completedExercises = new Set();
-
-    // Load routine details
-    async function loadRoutine() {
+    async function loadExercises() {
       const token = localStorage.getItem("authToken");
-      const routineId = localStorage.getItem("activeRoutineId");
+      try {
+          const res = await fetch("https://alzaaspr-production.up.railway.app/api/exercises", {
+          headers: { "Authorization": token }
+        });
+        const exercises = await res.json();
+        exercisesMap = {};
+        exercises.forEach(ex => {
+          exercisesMap[ex.name] = ex.id;
+        });
+      } catch (err) {
+        console.error("Error loading exercises:", err);
+      }
+    }
 
-      if (!token || !routineId) {
-        alert("Please select a routine first");
+    async function loadRoutine() {
+      const routineId = localStorage.getItem("activeRoutineId");
+      if (!routineId) {
         window.location.href = "select-routine.html";
         return;
       }
 
+      const token = localStorage.getItem("authToken");
       try {
-        const res = await fetch(`https://alzaaspr-production.up.railway.app/api/routines/${routineId}`, {
+          const res = await fetch("https://alzaaspr-production.up.railway.app/api/routines", {
           headers: { "Authorization": token }
         });
+        const routines = await res.json();
+        const routine = routines.find(r => r.id == routineId);
 
-        if (!res.ok) throw new Error("Failed to fetch routine");
-
-        routine = await res.json();
-        routineTitle.textContent = routine.name;
-        routineSubtitle.textContent = routine.description;
-        
-        displayExercises();
+        if (routine) {
+          currentRoutineName = routine.name;
+          document.getElementById("routineName").textContent = routine.name;
+          document.getElementById("routineDescription").textContent = routine.description;
+          
+          if (routineWorkouts[routine.name]) {
+            displayWorkoutButtons(routine.name);
+          } else {
+            document.getElementById("workoutButtons").innerHTML = '<p style="color: #dc3545;">Workout details not yet configured for this routine.</p>';
+          }
+        }
       } catch (err) {
-        console.error("Error loading routine:", err);
-        exercisesContainer.innerHTML = '<p style="color: red;">Failed to load routine. Please try again.</p>';
+        console.error("Error:", err);
       }
     }
 
-    // Display exercises
-    function displayExercises() {
-      if (!routine || !routine.exercises || routine.exercises.length === 0) {
-        exercisesContainer.innerHTML = '<p>No exercises in this routine.</p>';
-        return;
-      }
+    function displayWorkoutButtons(routineName) {
+      const workouts = routineWorkouts[routineName];
+      const buttonsContainer = document.getElementById("workoutButtons");
+      buttonsContainer.innerHTML = "";
 
-      exercisesContainer.innerHTML = "";
-      exercisesContainer.classList.remove("loading");
+      Object.keys(workouts).forEach(workoutName => {
+        const btn = document.createElement("button");
+        btn.classList.add("workout-btn");
+        btn.textContent = workoutName;
+        btn.onclick = () => selectWorkout(workoutName, btn);
+        buttonsContainer.appendChild(btn);
+      });
+    }
 
-      routine.exercises.forEach((exercise, index) => {
+    function selectWorkout(workoutName, btnElement) {
+      document.querySelectorAll(".workout-btn").forEach(b => b.classList.remove("active"));
+      btnElement.classList.add("active");
+
+      currentWorkoutData = routineWorkouts[currentRoutineName][workoutName];
+      completedExercises = [];
+      displayWorkoutExercises();
+    }
+
+    function displayWorkoutExercises() {
+      const content = document.getElementById("workoutContent");
+      const finishBtn = document.getElementById("finishBtn");
+      content.innerHTML = "";
+      content.style.display = "block";
+      finishBtn.style.display = "none";
+
+      currentWorkoutData.forEach((ex, index) => {
         const card = document.createElement("div");
         card.classList.add("exercise-card");
-        card.id = `exercise-${exercise.id}`;
+        card.id = `exercise-${index}`;
 
-        const gifSrc = exerciseGifs[exercise.name] || "";
-        const gifHtml = gifSrc ? `
-          <div class="exercise-demo">
-            <img src="${gifSrc}" 
-                 alt="${exercise.name}" 
-                 class="gif-thumbnail" 
-                 onclick="openModal('${gifSrc}')">
-            <p class="click-hint">👆 Click to expand</p>
-          </div>
-        ` : '';
-
-        // Generate set input rows
-        let setsHtml = '';
-        for (let i = 1; i <= exercise.sets; i++) {
-          setsHtml += `
+        let setsHTML = "";
+        for (let i = 1; i <= ex.sets; i++) {
+          setsHTML += `
             <div class="set-input-row">
-              <span class="set-number">Set ${i}:</span>
-              <input type="number" 
-                     placeholder="Weight" 
-                     data-exercise-id="${exercise.id}" 
-                     data-set-number="${i}" 
-                     data-type="weight"
-                     step="0.5">
-              <input type="number" 
-                     placeholder="Reps" 
-                     data-exercise-id="${exercise.id}" 
-                     data-set-number="${i}" 
-                     data-type="reps">
+              <span class="set-label">Set ${i}:</span>
+              <input type="number" placeholder="Weight" step="0.5" class="weight-input">
+              <input type="number" placeholder="Reps" class="reps-input">
             </div>
           `;
         }
 
         card.innerHTML = `
-          <div class="exercise-header">
-            <div class="exercise-name">${exercise.name}</div>
-            <div class="exercise-number">Exercise ${index + 1}</div>
-          </div>
-          
-          ${gifHtml}
-          
-          <div class="sets-section">
-            <span class="set-label">${exercise.sets} Sets × ${exercise.reps} Reps</span>
-            ${setsHtml}
-          </div>
-          
-          <button class="exercise-complete-btn" onclick="markExerciseComplete(${exercise.id})">
-            Mark Complete ✓
-          </button>
+          <div class="exercise-name">${ex.exercise}</div>
+          <div class="exercise-sets">${ex.sets} sets × ${ex.reps} reps</div>
+          ${setsHTML}
+          <button class="complete-exercise-btn" onclick="completeExercise(${index})">Complete Exercise</button>
         `;
 
-        exercisesContainer.appendChild(card);
-
-        // Store exercise data for later submission
-        exerciseData.push({
-          id: exercise.id,
-          name: exercise.name,
-          sets: exercise.sets,
-          data: []
-        });
+        content.appendChild(card);
       });
     }
 
-    // Open GIF modal
-    function openModal(gifSrc) {
-      modalGif.src = gifSrc;
-      gifModal.style.display = "flex";
-    }
+    async function completeExercise(index) {
+      const card = document.getElementById(`exercise-${index}`);
+      const weightInputs = card.querySelectorAll(".weight-input");
+      const repsInputs = card.querySelectorAll(".reps-input");
+      const exerciseData = currentWorkoutData[index];
 
-    // Close GIF modal
-    function closeModal() {
-      gifModal.style.display = "none";
-    }
-
-    // Mark exercise as complete
-    function markExerciseComplete(exerciseId) {
-      const card = document.getElementById(`exercise-${exerciseId}`);
-      const inputs = card.querySelectorAll(`input[data-exercise-id="${exerciseId}"]`);
-      
-      // Collect set data
       let sets = [];
-      let isValid = true;
-      
-      for (let i = 0; i < inputs.length; i += 2) {
-        const weightInput = inputs[i];
-        const repsInput = inputs[i + 1];
-        const weight = parseFloat(weightInput.value);
-        const reps = parseInt(repsInput.value);
-        
-        if (!weight || weight <= 0 || !reps || reps <= 0) {
-          isValid = false;
-          break;
-        }
-        
-        sets.push({ weight, reps });
-      }
+      let allFilled = true;
 
-      if (!isValid) {
-        alert("Please fill in all weight and reps for this exercise");
+      weightInputs.forEach((weightInput, i) => {
+        const weight = parseFloat(weightInput.value);
+        const reps = parseInt(repsInputs[i].value);
+        
+        if (!weight || !reps) {
+          allFilled = false;
+        } else {
+          sets.push({ reps, weight });
+        }
+      });
+
+      if (!allFilled) {
+        alert("Please fill in all sets");
         return;
       }
 
-      // Store the data
-      const exerciseIndex = exerciseData.findIndex(e => e.id === exerciseId);
-      if (exerciseIndex !== -1) {
-        exerciseData[exerciseIndex].data = sets;
+      const exerciseId = exercisesMap[exerciseData.exercise];
+      if (!exerciseId) {
+        alert(`Exercise "${exerciseData.exercise}" not found in database`);
+        return;
       }
 
-      // Mark as completed
-      completedExercises.add(exerciseId);
-      const btn = card.querySelector(".exercise-complete-btn");
-      btn.textContent = "✓ Completed";
-      btn.classList.add("completed");
-      btn.disabled = true;
+      const token = localStorage.getItem("authToken");
+      const log = {
+        exerciseId: exerciseId,
+        date: new Date().toISOString().split("T")[0],
+        sets: sets
+      };
 
-      // Disable inputs
-      inputs.forEach(input => input.disabled = true);
+      try {
+          const response = await fetch("https://alzaaspr-production.up.railway.app/api/logs", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": token
+          },
+          body: JSON.stringify(log)
+        });
 
-      // Check if all exercises are complete
-      if (completedExercises.size === routine.exercises.length) {
-        finishBtn.disabled = false;
+        const result = await response.json();
+        if (result.success) {
+          completedExercises.push(index);
+          card.querySelector(".complete-exercise-btn").textContent = "✓ Completed";
+          card.querySelector(".complete-exercise-btn").classList.add("completed");
+          card.querySelector(".complete-exercise-btn").disabled = true;
+
+          if (completedExercises.length === currentWorkoutData.length) {
+            document.getElementById("finishBtn").style.display = "block";
+          }
+        } else {
+          alert("Error saving: " + result.message);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Could not connect to server");
       }
     }
 
-    // Finish routine and save to backend
-    finishBtn.addEventListener("click", async () => {
-      const token = localStorage.getItem("authToken");
-      
-      // Prepare logs for all exercises
-      const logs = exerciseData
-        .filter(ex => completedExercises.has(ex.id))
-        .map(ex => ({
-          exerciseId: ex.id,
-          date: new Date().toISOString().split("T")[0],
-          sets: ex.data
-        }));
+    function finishWorkout() {
+      alert("Workout completed! Great job!");
+      window.location.href = "dashboard.html";
+    }
 
-      try {
-        // Send each log to backend
-        for (const log of logs) {
-          const response = await fetch("https://alzaaspr-production.up.railway.app/api/logs", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": token
-            },
-            body: JSON.stringify(log)
-          });
-
-          const result = await response.json();
-          if (!result.success) {
-            throw new Error(`Failed to save ${log.exerciseId}`);
-          }
-        }
-
-        alert("🎉 Routine completed successfully!");
-        window.location.href = "dashboard.html";
-      } catch (error) {
-        console.error("Error saving routine:", error);
-        alert("Error saving routine. Please try again.");
-      }
-    });
-
-    // Load routine on page load
+    loadExercises();
     loadRoutine();
   </script>
 </body>
