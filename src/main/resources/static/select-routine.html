@@ -82,40 +82,24 @@
       color: #666;
     }
 
-/* Mobile responsiveness */
-@media (max-width: 600px) {
-  body {
-    padding: 10px;
-  }
-  
-  .form-card {
-    padding: 15px;
-  }
-  
-  .set-input-row {
-    flex-direction: column;
-    gap: 8px;
-  }
-  
-  .set-input-row input {
-    width: 100%;
-  }
-  
-  .log-set-btn {
-    width: 100%;
-    padding: 12px 20px;
-  }
-  
-  .set-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-  
-  .delete-set-btn {
-    align-self: flex-end;
-  }
-}
+    /* Mobile responsiveness */
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+      
+      .routine-card {
+        padding: 15px;
+      }
+      
+      .routine-name {
+        font-size: 18px;
+      }
+      
+      .routine-description {
+        font-size: 13px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -143,7 +127,7 @@
       }
 
       try {
-          const res = await fetch("https://alzaaspr-production.up.railway.app/api/routines", {
+        const res = await fetch("https://alzaaspr-production.up.railway.app/api/routines", {
           headers: { "Authorization": token }
         });
 
