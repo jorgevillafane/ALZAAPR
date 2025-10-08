@@ -65,7 +65,7 @@
       color: #007bff;
       font-size: 18px;
     }
-    .video-thumbnail {
+    .gif-thumbnail {
       width: 200px;
       height: 355px; /* 9:16 aspect ratio */
       border-radius: 8px;
@@ -76,7 +76,7 @@
       margin: 0 auto;
       display: block;
     }
-    .video-thumbnail:hover {
+    .gif-thumbnail:hover {
       transform: scale(1.05);
       box-shadow: 0 4px 12px rgba(0,123,255,0.3);
     }
@@ -87,8 +87,8 @@
       font-style: italic;
     }
 
-    /* Modal for expanded video */
-    .video-modal {
+    /* Modal for expanded GIF */
+    .gif-modal {
       display: none;
       position: fixed;
       z-index: 1000;
@@ -100,13 +100,12 @@
       justify-content: center;
       align-items: center;
     }
-    .video-modal-content {
+    .gif-modal-content {
       position: relative;
       max-width: 90%;
       max-height: 90%;
     }
-    .video-modal video,
-    .video-modal img {
+    .gif-modal img {
       width: auto;
       height: 80vh;
       max-width: 100%;
@@ -247,7 +246,7 @@
         padding: 15px;
       }
       
-      .video-thumbnail {
+      .gif-thumbnail {
         width: 150px;
         height: 267px;
       }
@@ -304,10 +303,7 @@
     <!-- Exercise Demo Section -->
     <div class="exercise-demo" id="exerciseDemo">
       <h3 id="exerciseName"></h3>
-      <video id="exerciseVideo" class="video-thumbnail" loop muted playsinline onclick="openModal()">
-        <source id="videoSource" src="" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
+      <img id="exerciseGif" class="gif-thumbnail" onclick="openModal()" alt="Exercise demonstration">
       <p class="click-hint">👆 Click to expand</p>
     </div>
 
@@ -329,27 +325,25 @@
 
   <div id="workoutSummary"></div>
 
-  <!-- Modal for expanded video -->
-  <div id="videoModal" class="video-modal" onclick="closeModal()">
-    <div class="video-modal-content" onclick="event.stopPropagation()">
+  <!-- Modal for expanded GIF -->
+  <div id="gifModal" class="gif-modal" onclick="closeModal()">
+    <div class="gif-modal-content" onclick="event.stopPropagation()">
       <button class="close-modal" onclick="closeModal()">&times;</button>
-      <video id="modalVideo" controls loop playsinline>
-        <source id="modalVideoSource" src="" type="video/mp4">
-      </video>
+      <img id="modalGif" src="" alt="Exercise demonstration">
     </div>
   </div>
 
   <script>
-    // Map exercise names to video files (you'll add these to your static folder)
-    const exerciseVideos = {
-      "Bench Press": "videos/bench-press.mp4",
-      "Barbell Row": "videos/barbell-row.mp4",
-      "Pull-up": "videos/pull-up.mp4",
-      "Deadlift": "videos/deadlift.mp4",
-      "Overhead Press": "videos/overhead-press.mp4",
-      "Dumbbell Curl": "videos/dumbbell-curl.mp4",
-      "Squat": "videos/squat.mp4",
-      "Leg Press": "videos/leg-press.mp4"
+    // Map exercise names to GIF files
+    const exerciseGifs = {
+      "Bench Press": "gifs/bench-press.gif",
+      "Barbell Row": "gifs/barbell-row.gif",
+      "Pull-up": "gifs/pull-up.gif",
+      "Deadlift": "gifs/deadlift.gif",
+      "Overhead Press": "gifs/overhead-press.gif",
+      "Dumbbell Curl": "gifs/dumbbell-curl.gif",
+      "Squat": "gifs/squat.gif",
+      "Leg Press": "gifs/leg-press.gif"
     };
 
     const exercisesByBodyPart = {
@@ -366,17 +360,15 @@
     const exerciseSelect = document.getElementById("exercise");
     const exerciseDemo = document.getElementById("exerciseDemo");
     const exerciseName = document.getElementById("exerciseName");
-    const exerciseVideo = document.getElementById("exerciseVideo");
-    const videoSource = document.getElementById("videoSource");
+    const exerciseGif = document.getElementById("exerciseGif");
     const setInputSection = document.getElementById("setInputSection");
     const weightInput = document.getElementById("weightInput");
     const repsInput = document.getElementById("repsInput");
     const loggedSets = document.getElementById("loggedSets");
     const setsContainer = document.getElementById("setsContainer");
     const workoutSummary = document.getElementById("workoutSummary");
-    const videoModal = document.getElementById("videoModal");
-    const modalVideo = document.getElementById("modalVideo");
-    const modalVideoSource = document.getElementById("modalVideoSource");
+    const gifModal = document.getElementById("gifModal");
+    const modalGif = document.getElementById("modalGif");
 
     let exercisesMap = {};
     let currentSets = [];
@@ -430,7 +422,7 @@
       }
     });
 
-    // Show exercise video and set input when exercise is selected
+    // Show exercise GIF and set input when exercise is selected
     exerciseSelect.addEventListener("change", () => {
       if (exerciseSelect.value) {
         currentExerciseName = exerciseSelect.value;
@@ -440,11 +432,9 @@
         // Show exercise name
         exerciseName.textContent = currentExerciseName;
         
-        // Load video if available
-        if (exerciseVideos[currentExerciseName]) {
-          videoSource.src = exerciseVideos[currentExerciseName];
-          exerciseVideo.load();
-          exerciseVideo.play();
+        // Load GIF if available
+        if (exerciseGifs[currentExerciseName]) {
+          exerciseGif.src = exerciseGifs[currentExerciseName];
           exerciseDemo.style.display = "block";
         } else {
           exerciseDemo.style.display = "none";
@@ -462,20 +452,17 @@
       }
     });
 
-    // Open video modal
+    // Open GIF modal
     function openModal() {
-      if (exerciseVideos[currentExerciseName]) {
-        modalVideoSource.src = exerciseVideos[currentExerciseName];
-        modalVideo.load();
-        modalVideo.play();
-        videoModal.style.display = "flex";
+      if (exerciseGifs[currentExerciseName]) {
+        modalGif.src = exerciseGifs[currentExerciseName];
+        gifModal.style.display = "flex";
       }
     }
 
-    // Close video modal
+    // Close GIF modal
     function closeModal() {
-      videoModal.style.display = "none";
-      modalVideo.pause();
+      gifModal.style.display = "none";
     }
 
     // Log a single set
