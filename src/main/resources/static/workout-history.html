@@ -68,25 +68,106 @@
     .log-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
       margin-bottom: 15px;
       padding-bottom: 10px;
       border-bottom: 1px solid #eee;
+    }
+    .log-header-left {
+      flex: 1;
     }
     .exercise-name {
       font-size: 20px;
       font-weight: bold;
       color: #007bff;
+      margin-bottom: 5px;
     }
     .log-date {
       color: #666;
       font-size: 14px;
+    }
+    .log-body {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .sets-column {
+      flex: 1;
     }
     .set-row {
       padding: 8px 0;
       color: #333;
       font-size: 15px;
     }
+    
+    /* GIF Column */
+    .gif-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .gif-thumbnail {
+      width: 120px;
+      height: 213px; /* 9:16 aspect ratio */
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: 2px solid #007bff;
+      object-fit: cover;
+    }
+    .gif-thumbnail:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0,123,255,0.3);
+    }
+    .gif-hint {
+      margin-top: 8px;
+      font-size: 11px;
+      color: #666;
+      font-style: italic;
+    }
+
+    /* Modal for expanded GIF */
+    .gif-modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      justify-content: center;
+      align-items: center;
+    }
+    .gif-modal-content {
+      position: relative;
+      max-width: 90%;
+      max-height: 90%;
+    }
+    .gif-modal img {
+      width: auto;
+      height: 80vh;
+      max-width: 100%;
+      border-radius: 10px;
+      object-fit: contain;
+    }
+    .close-modal {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      color: white;
+      font-size: 35px;
+      font-weight: bold;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0 10px;
+    }
+    .close-modal:hover {
+      color: #ccc;
+    }
+
     .loading {
       text-align: center;
       padding: 40px;
@@ -98,6 +179,26 @@
       color: #999;
       background: white;
       border-radius: 10px;
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+      
+      .log-body {
+        flex-direction: column;
+      }
+      
+      .gif-column {
+        margin-top: 15px;
+      }
+      
+      .gif-thumbnail {
+        width: 100px;
+        height: 178px;
+      }
     }
   </style>
 </head>
@@ -115,9 +216,31 @@
   
   <div id="historyContainer" class="loading">Loading workout history...</div>
 
+  <!-- Modal for expanded GIF -->
+  <div id="gifModal" class="gif-modal" onclick="closeModal()">
+    <div class="gif-modal-content" onclick="event.stopPropagation()">
+      <button class="close-modal" onclick="closeModal()">&times;</button>
+      <img id="modalGif" src="" alt="Exercise Demo">
+    </div>
+  </div>
+
   <script>
+    // Map exercise names to GIF files
+    const exerciseGifs = {
+      "Bench Press": "gifs/bench-press.gif",
+      "Barbell Row": "gifs/barbell-row.gif",
+      "Pull-up": "gifs/pull-up.gif",
+      "Deadlift": "gifs/deadlift.gif",
+      "Overhead Press": "gifs/overhead-press.gif",
+      "Dumbbell Curl": "gifs/dumbbell-curl.gif",
+      "Squat": "gifs/squat.gif",
+      "Leg Press": "gifs/leg-press.gif"
+    };
+
     const historyContainer = document.getElementById("historyContainer");
     const dateFilter = document.getElementById("dateFilter");
+    const gifModal = document.getElementById("gifModal");
+    const modalGif = document.getElementById("modalGif");
     let allLogs = [];
 
     // Load workout history
@@ -130,7 +253,7 @@
       }
 
       try {
-          let url = "https://alzaaspr-production.up.railway.app/api/logs/history";
+        let url = "https://alzaaspr-production.up.railway.app/api/logs/history";
         if (date) {
           url += `?date=${date}`;
         }
@@ -172,21 +295,52 @@
         const card = document.createElement("div");
         card.classList.add("log-card");
 
+        // Build sets HTML
         let setsHTML = "";
         log.sets.forEach(set => {
           setsHTML += `<div class="set-row">Set ${set.setNumber}: ${set.weight} lbs × ${set.reps} reps</div>`;
         });
 
+        // Check if GIF exists for this exercise
+        const gifSrc = exerciseGifs[log.exercise.name] || "";
+        const gifHTML = gifSrc ? `
+          <div class="gif-column">
+            <img src="${gifSrc}" 
+                 alt="${log.exercise.name}" 
+                 class="gif-thumbnail" 
+                 onclick="openModal('${gifSrc}')">
+            <p class="gif-hint">👆 Click to expand</p>
+          </div>
+        ` : '';
+
         card.innerHTML = `
           <div class="log-header">
-            <div class="exercise-name">${log.exercise.name}</div>
-            <div class="log-date">${formatDate(log.date)}</div>
+            <div class="log-header-left">
+              <div class="exercise-name">${log.exercise.name}</div>
+              <div class="log-date">${formatDate(log.date)}</div>
+            </div>
           </div>
-          ${setsHTML}
+          <div class="log-body">
+            <div class="sets-column">
+              ${setsHTML}
+            </div>
+            ${gifHTML}
+          </div>
         `;
 
         historyContainer.appendChild(card);
       });
+    }
+
+    // Open GIF modal
+    function openModal(gifSrc) {
+      modalGif.src = gifSrc;
+      gifModal.style.display = "flex";
+    }
+
+    // Close GIF modal
+    function closeModal() {
+      gifModal.style.display = "none";
     }
 
     // Format date for display
